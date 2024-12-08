@@ -37,6 +37,36 @@ const courtController = require('../controllers/courtController');
  */
 router.get('/', courtController.getCourts);
 
+/**
+ * @swagger
+ * /courts/{id}:
+ *   get:
+ *     tags: [Courts]
+ *     summary: Récupérer un court spécifique par son ID
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID du court
+ *     responses:
+ *       200:
+ *         description: Court trouvé
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 status:
+ *                   type: string
+ *       404:
+ *         description: Court non trouvé
+ */
 router.get('/:id', courtController.getCourtById);
 
 /**
@@ -66,7 +96,40 @@ router.get('/:id', courtController.getCourtById);
  */
 router.post('/', courtController.createCourt);
 
-// Route pour modifier un court
+/**
+ * @swagger
+ * /courts/{id}:
+ *   put:
+ *     summary: Met à jour un court existant
+ *     tags: [Courts]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID du court à modifier
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Nouveau nom du court
+ *               status:
+ *                 type: string
+ *                 description: Nouveau statut du court
+ *     responses:
+ *       200:
+ *         description: Court mis à jour avec succès
+ *       404:
+ *         description: Court non trouvé
+ *       500:
+ *         description: Erreur interne du serveur
+ */
 router.put('/:id', courtController.updateCourt);
 
 module.exports = router;
