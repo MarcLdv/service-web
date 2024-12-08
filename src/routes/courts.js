@@ -37,6 +37,8 @@ const courtController = require('../controllers/courtController');
  */
 router.get('/', courtController.getCourts);
 
+router.get('/:id', courtController.getCourtById);
+
 /**
  * @swagger
  * /courts:
@@ -63,5 +65,8 @@ router.get('/', courtController.getCourts);
  *         description: Erreur de validation.
  */
 router.post('/', courtController.createCourt);
+
+// Route pour modifier un court
+router.put('/:id', courtController.updateCourt);
 
 module.exports = router;
