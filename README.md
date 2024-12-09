@@ -12,8 +12,7 @@ npx sequelize-cli db:seed:all
 
 npm run dev
 
-
-TODO : 
- - Ajouter systeme de compte et connexion 
- - Ajouter systeme de reservation avec le compte connecte (pas possible si pas connecte)
- - Afficher les données interessante style reservation en fonction du compte ect
+TODO :
+- Ajouter systeme de compte et connexion
+- Ajouter systeme de reservation avec le compte connecte (pas possible si pas connecte)
+- Afficher les données interessante style reservation en fonction du compte ect.
