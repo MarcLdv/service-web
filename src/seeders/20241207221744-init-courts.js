@@ -1,18 +1,31 @@
 'use strict';
 
+/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    // Données initiales
+    // Données des terrains
     await queryInterface.bulkInsert('Courts', [
       {
-        name: 'Court 1',
+        name: 'A',
         status: 'available',
         createdAt: new Date(),
         updatedAt: new Date()
       },
       {
-        name: 'Court 2',
-        status: 'unavailable',
+        name: 'B',
+        status: 'available',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'C',
+        status: 'available',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        name: 'D',
+        status: 'available',
         createdAt: new Date(),
         updatedAt: new Date()
       }

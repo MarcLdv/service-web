@@ -21,7 +21,7 @@ exports.getCourts = async (req, res) => {
     }
 };
 
-// Fonction pour récupérer un court par ID
+// Fonction pour récupérer un terrain via son ID
 exports.getCourtById = async (req, res) => {
     try {
         const { id } = req.params; // Récupère l'ID depuis les paramètres de l'URL
@@ -38,7 +38,7 @@ exports.getCourtById = async (req, res) => {
     }
 };
 
-// Fonction pour mettre à jour un court
+// Fonction pour mettre à jour un terrain
 exports.updateCourt = async (req, res) => {
     try {
         const { id } = req.params; // Récupérer l'ID du court
