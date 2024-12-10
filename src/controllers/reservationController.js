@@ -3,41 +3,53 @@ const { Op } = require('sequelize');
 
 // Créer une réservation
 const createReservation = async (req, res) => {
-    const { courtId, date, timeSlot } = req.body;
+    const { courtName, date, timeSlot } = req.body;
     const userId = req.user.id;
 
     try {
         const today = new Date();
-        const reservationDate = new Date(date);
+        const dayOfWeek = today.getDay();
+        const startOfWeek = new Date(today.setDate(today.getDate() - dayOfWeek + 1)); // Lundi
+        const endOfWeek = new Date(today.setDate(today.getDate() - dayOfWeek + 7)); // Dimanche
 
-        if (reservationDate < today.setHours(0, 0, 0, 0)) {
-            return res.status(400).json({ message: 'Reservation date cannot be in the past' });
+        // Vérifie si la date est dans la semaine courante
+        const reservationDate = new Date(date);
+        if (
+            reservationDate < startOfWeek.setHours(0, 0, 0, 0) ||
+            reservationDate > endOfWeek.setHours(23, 59, 59, 999) ||
+            reservationDate.getDay() === 0 // Dimanche
+        ) {
+            return res.status(400).json({ message: 'Reservations can only be made for the current week. ' });
         }
 
+        // Vérifie si le créneau horaire est valide
         if (timeSlot > 16 || timeSlot < 1) {
             return res.status(400).json({ message: 'Time slot not valid. Try a value between 1 and 16.' });
         }
 
-        const court = await Court.findByPk(courtId);
+        // Recherche de la salle par nom
+        const court = await Court.findOne({ where: { name: courtName } });
         if (!court) {
-            return res.status(404).json({ message: 'Court not found' });
+            return res.status(404).json({ message: `Court with name "${courtName}" not found` });
         }
 
         if (court.status !== 'available') {
             return res.status(400).json({ message: 'Court is not available' });
         }
 
+        // Vérifie si le créneau est déjà réservé
         const existingReservation = await Reservation.findOne({
-            where: { courtId, date, timeSlot },
+            where: { courtId: court.id, date, timeSlot },
         });
 
         if (existingReservation) {
             return res.status(400).json({ message: 'Time slot already booked' });
         }
 
+        // Crée la réservation
         const reservation = await Reservation.create({
             userId,
-            courtId,
+            courtId: court.id,
             date,
             timeSlot,
         });
