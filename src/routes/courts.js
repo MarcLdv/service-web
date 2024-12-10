@@ -11,6 +11,40 @@ const courtController = require('../controllers/courtController');
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     Terrain:
+ *       type: object
+ *       required:
+ *         - username
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: Identifiant unique du terrain
+ *         name:
+ *           type: string
+ *           description: Nom d'utilisateur
+ *         status:
+ *           type: string
+ *           description: Nom d'utilisateur
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Date de création de l'utilisateur
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: Dernière mise à jour de l'utilisateur
+ *       example:
+ *         id: 1
+ *         name: "A"
+ *         status: "available"
+ *         createdAt: "2024-12-01T12:00:00Z"
+ *         updatedAt: "2024-12-01T12:00:00Z"
+ */
+
+/**
+ * @swagger
  * /courts:
  *   get:
  *     summary: Récupérer tous les terrains
