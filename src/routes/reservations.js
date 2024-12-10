@@ -66,66 +66,31 @@ const authenticateUser = require('../middlewares/auth');
  *           schema:
  *             type: object
  *             required:
- *               - courtId
+ *               - courtName
  *               - date
  *               - timeSlot
  *             properties:
- *               courtId:
- *                 type: integer
- *                 description: ID du terrain à réserver
+ *               courtName:
+ *                 type: string
+ *                 description: Nom de la salle à réserver
  *               date:
  *                 type: string
  *                 format: date
- *                 description: Date de la réservation
+ *                 description: Date de la réservation (dans la semaine en cours, sauf dimanche)
  *               timeSlot:
  *                 type: integer
  *                 description: Créneau horaire de la réservation
  *             example:
- *               courtId: 1
+ *               courtName: "A"
  *               date: "2024-12-10"
  *               timeSlot: 10
  *     responses:
  *       201:
  *         description: Réservation créée avec succès
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   description: ID de la réservation
- *                 userId:
- *                   type: integer
- *                   description: ID de l'utilisateur ayant effectué la réservation
- *                 courtId:
- *                   type: integer
- *                   description: ID du terrain réservé
- *                 date:
- *                   type: string
- *                   format: date
- *                   description: Date de la réservation
- *                 timeSlot:
- *                   type: integer
- *                   description: Créneau horaire réservé
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *             example:
- *               id: 1
- *               userId: 42
- *               courtId: 1
- *               date: "2024-12-10"
- *               timeSlot: 10
- *               createdAt: "2024-12-07T12:00:00Z"
- *               updatedAt: "2024-12-07T12:00:00Z"
  *       400:
- *         description: Erreur de validation ou créneau déjà réservé
- *       401:
- *         description: Non autorisé (token manquant ou invalide)
+ *         description: Erreur de validation (date hors semaine en cours ou dimanche)
+ *       404:
+ *         description: Salle non trouvée
  *       500:
  *         description: Erreur interne du serveur
  */
