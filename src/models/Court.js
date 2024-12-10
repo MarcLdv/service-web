@@ -1,17 +1,15 @@
 'use strict';
+const {
+  Model
+} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  const Court = sequelize.define('Court', {
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.STRING,
-      defaultValue: 'available',
-    },
-  }, {});
-  Court.associate = function(models) {
-    // Ajouter associations ici
-  };
+  class Court extends Model {}
+  Court.init({
+    name: DataTypes.STRING,
+    status: DataTypes.STRING
+  }, {
+    sequelize,
+    modelName: 'Court',
+  });
   return Court;
 };

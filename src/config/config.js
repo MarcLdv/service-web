@@ -5,7 +5,8 @@ module.exports = {
     username: "postgres",
     password: "password",
     database: "badminton_reservation",
-    host: process.env.DB_HOST,
+    host: "localhost",
+    port: 5433,
     dialect: 'postgres',
   },
   test: {

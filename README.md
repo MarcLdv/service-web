@@ -12,8 +12,19 @@ npx sequelize-cli db:seed:all
 
 npm run dev
 
+Démarrer le serveur GraphQL : 
+ - node graphql/server.js
 
-TODO : 
- - Ajouter systeme de compte et connexion 
- - Ajouter systeme de reservation avec le compte connecte (pas possible si pas connecte)
- - Afficher les données interessante style reservation en fonction du compte ect
+Pour le tester sur Postman :
+- Méthode : POST
+- URL : http://localhost:4000/
+- Body :
+`````json
+{
+    "query": "query GetAvailableSlots($date: String!, $terrain: String!) { availableSlots(date: $date, terrain: $terrain) { time isAvailable } }",
+    "variables": {
+        "date": "2024-11-27",
+        "terrain": "A"
+    }
+}
+`````
