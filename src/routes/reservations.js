@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createReservation, getUserReservations } = require('../controllers/reservationController');
+const { createReservation, getUserReservations, deleteReservation } = require('../controllers/reservationController');
 const authenticateUser = require('../middlewares/auth');
 
 /**
@@ -189,5 +189,32 @@ router.post('/', authenticateUser, createReservation);
  *         description: Erreur interne du serveur
  */
 router.get('/', authenticateUser, getUserReservations);
+
+/**
+ * @swagger
+ * /reservations/{reservationId}:
+ *   delete:
+ *     summary: Supprimer une réservation
+ *     tags: [Reservations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: reservationId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la réservation à supprimer
+ *     responses:
+ *       200:
+ *         description: Réservation supprimée avec succès
+ *       403:
+ *         description: Non autorisé
+ *       404:
+ *         description: Réservation non trouvée
+ *       500:
+ *         description: Erreur interne du serveur
+ */
+router.delete('/:reservationId', authenticateUser, deleteReservation);
 
 module.exports = router;
