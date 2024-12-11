@@ -1,9 +1,28 @@
-# service-web
+# API WEB - Conception et implémentation d'un service de gestion  
+
 Création d'une API restfull, implémentant un système de réservation de terrains de badminton. Utilisation d'un ORM, spécification Openai et Swagger
 
-## Lancement du projet : 
+## Lancement du projet
 
+- Créer votre fichier d'environnement local
+
+```Bash
+cp .env.dist .env
+```
+
+- Installer les dépendances
+
+```Bash
 npm install
+```
+
+- Générer la clé de secret pour les tokens JWT
+
+```Bash
+node gensecrekey.js
+```
+
+
 docker-compose up -d
 
 Dans le dossier src effectuer les commandes suivantes :
