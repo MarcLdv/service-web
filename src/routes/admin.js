@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { loginAdmin, disableCourt, changeCourtStatus } = require("../controllers/adminController");
+const { loginAdmin, changeCourtStatus } = require("../controllers/adminController");
 /**
  * @swagger
  * tags:
@@ -102,6 +102,6 @@ router.post('/login', loginAdmin);
  *       500:
  *         description: Erreur interne du serveur
  */
-router.post('/courts/:id/status', changeCourtStatus);
+router.post('/courts/:id', changeCourtStatus);
 
 module.exports = router;

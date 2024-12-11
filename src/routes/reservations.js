@@ -13,6 +13,11 @@ const authenticateUser = require('../middlewares/auth');
 /**
  * @swagger
  * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
  *   schemas:
  *     Reservation:
  *       type: object

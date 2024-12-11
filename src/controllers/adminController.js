@@ -45,11 +45,12 @@ const loginAdmin = async (req, res) => {
   }
 };
 
-// TODO : Ajouter les fonctions suivantes
 // Modifier le statut d'un cours
 const changeCourtStatus = async (req, res) => {
   try {
-    const court = await Court.findByPk(req.admin.id);
+    const courtId = req.params.id;
+    console.log(courtId);
+    const court = await Court.findByPk(courtId);
     if (!court) {
       return res.status(404).json({ message: "Court not found" });
     }

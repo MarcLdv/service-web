@@ -28,3 +28,10 @@ Pour le tester sur Postman :
     }
 }
 `````
+
+
+
+TODO : 
+README CLEAN
+Un Open API Description File (OAD) au format yaml, décrivant votre API
+GRAPHQL REVOIR TRUC QUI BUG
