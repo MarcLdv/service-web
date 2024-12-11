@@ -23,16 +23,9 @@ const authenticateUser = require('../middlewares/auth');
  *         userId:
  *           type: integer
  *           description: Identifiant de l'utilisateur ayant effectué la réservation
- *         courtId:
+ *         slotId:
  *           type: integer
- *           description: Identifiant du terrain réservé
- *         date:
- *           type: string
- *           format: date
- *           description: Date de la réservation
- *         timeSlot:
- *           type: string
- *           description: Créneau horaire de la réservation (par exemple "10:00-11:00")
+ *           description: Identifiant du créneau horaire réservé
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -44,9 +37,7 @@ const authenticateUser = require('../middlewares/auth');
  *       example:
  *         id: 1
  *         userId: 2
- *         courtId: 1
- *         date: "2024-12-10"
- *         timeSlot: "10:00-11:00"
+ *         slotId: 1
  *         createdAt: "2024-12-01T12:00:00Z"
  *         updatedAt: "2024-12-01T12:00:00Z"
  */
@@ -66,31 +57,25 @@ const authenticateUser = require('../middlewares/auth');
  *           schema:
  *             type: object
  *             required:
- *               - courtName
- *               - date
- *               - timeSlot
+ *               - courtId
+ *               - slotId
  *             properties:
- *               courtName:
- *                 type: string
- *                 description: Nom de la salle à réserver
- *               date:
- *                 type: string
- *                 format: date
- *                 description: Date de la réservation (dans la semaine en cours, sauf dimanche)
- *               timeSlot:
+ *               courtId:
  *                 type: integer
- *                 description: Créneau horaire de la réservation
+ *                 description: Identifiant du terrain à réserver
+ *               slotId:
+ *                 type: integer
+ *                 description: Identifiant du créneau horaire à réserver
  *             example:
- *               courtName: "A"
- *               date: "2024-12-10"
- *               timeSlot: 10
+ *               courtId: 1
+ *               slotId: 1
  *     responses:
  *       201:
  *         description: Réservation créée avec succès
  *       400:
- *         description: Erreur de validation (date hors semaine en cours ou dimanche)
+ *         description: Erreur de validation (créneau horaire non disponible)
  *       404:
- *         description: Salle non trouvée
+ *         description: Créneau horaire non trouvé
  *       500:
  *         description: Erreur interne du serveur
  */
@@ -117,37 +102,21 @@ router.post('/', authenticateUser, createReservation);
  *                   id:
  *                     type: integer
  *                     description: ID de la réservation
- *                   courtId:
- *                     type: integer
- *                     description: ID du terrain réservé
- *                   date:
+ *                   courtName:
  *                     type: string
- *                     format: date
- *                     description: Date de la réservation
- *                   timeSlot:
- *                     type: integer
- *                     description: Créneau horaire réservé
- *                   Court:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: ID du terrain
- *                       name:
- *                         type: string
- *                         description: Nom du terrain
- *                       status:
- *                         type: string
- *                         description: Statut du terrain (available ou non)
+ *                     description: Nom du terrain réservé
+ *                   slotName:
+ *                     type: string
+ *                     description: Nom du créneau horaire réservé
+ *                   schedule:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Date et heure du créneau horaire réservé
  *                 example:
  *                   id: 1
- *                   courtId: 1
- *                   date: "2024-12-10"
- *                   timeSlot: 10
- *                   Court:
- *                     id: 1
- *                     name: "Court A"
- *                     status: "available"
+ *                   courtName: "Court A"
+ *                   slotName: "Slot 1"
+ *                   schedule: "2024-12-10T10:00:00Z"
  *       401:
  *         description: Non autorisé (token manquant ou invalide)
  *       500:

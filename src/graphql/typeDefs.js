@@ -1,13 +1,13 @@
 const { gql } = require('apollo-server');
 
 const typeDefs = gql`
-    type Slot {
+    type Slots {
         time: String
         isAvailable: Boolean
     }
 
     type Query {
-        availableSlots(date: String!, terrain: String!): [Slot]
+        availableSlots(date: String!, terrain: String!): [Slots]
     }
 `;
 

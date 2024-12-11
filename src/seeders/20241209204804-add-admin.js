@@ -1,17 +1,22 @@
 'use strict';
 
+require('dotenv').config({ path: require('path').resolve(__dirname, '../../.env') });
+const { hashPassword } = require('../bcrypt');
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-   // Données initiales
-   await queryInterface.bulkInsert('Admin', [
-     {
-       pseudo: 'admybad',
-       password: '$2y$10$wD/UKq2xVeofwFGO5pkGxuD4xDI1XBP8IbATT.hTvAdTxWPW.9meW',
-       createdAt: new Date(),
-       updatedAt: new Date()
-     }
-   ], {});
+    const adminPassword = process.env.ADMIN_PASSWORD;
+    const hashedPassword = await hashPassword(adminPassword);
+    // Données initiales
+    await queryInterface.bulkInsert('Admin', [
+      {
+        pseudo: 'admybad',
+        password: hashedPassword,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ], {});
   },
 
   async down (queryInterface, Sequelize) {

@@ -10,6 +10,15 @@ const swaggerOptions = {
             version: '1.0.0',
             description: 'API RESTful pour gérer les réservations de terrains de badminton.',
         },
+        components: {
+            securitySchemes: {
+              bearerAuth: {
+                type: 'http',
+                scheme: 'bearer',
+                bearerFormat: 'JWT',
+              },
+            },
+          },
         servers: [
             {
                 url: 'http://localhost:3000',

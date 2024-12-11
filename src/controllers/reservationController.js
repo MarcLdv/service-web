@@ -1,36 +1,17 @@
-const { Reservation, Court, User } = require('../models');
+const { Reservation, Court, Slots, User } = require('../models');
 const { Op } = require('sequelize');
 
 // Créer une réservation
 const createReservation = async (req, res) => {
-    const { courtName, date, timeSlot } = req.body;
+    const courtId  = req.body.courtId;
+    const slotId = req.body.slotId;
     const userId = req.user.id;
 
     try {
-        const today = new Date();
-        const dayOfWeek = today.getDay();
-        const startOfWeek = new Date(today.setDate(today.getDate() - dayOfWeek + 1)); // Lundi
-        const endOfWeek = new Date(today.setDate(today.getDate() - dayOfWeek + 7)); // Dimanche
-
-        // Vérifie si la date est dans la semaine courante
-        const reservationDate = new Date(date);
-        if (
-            reservationDate < startOfWeek.setHours(0, 0, 0, 0) ||
-            reservationDate > endOfWeek.setHours(23, 59, 59, 999) ||
-            reservationDate.getDay() === 0 // Dimanche
-        ) {
-            return res.status(400).json({ message: 'Reservations can only be made for the current week. ' });
-        }
-
-        // Vérifie si le créneau horaire est valide
-        if (timeSlot > 16 || timeSlot < 1) {
-            return res.status(400).json({ message: 'Time slot not valid. Try a value between 1 and 16.' });
-        }
-
-        // Recherche de la salle par nom
-        const court = await Court.findOne({ where: { name: courtName } });
+        // Recherche du terrain par ID
+        const court = await Court.findByPk(courtId);
         if (!court) {
-            return res.status(404).json({ message: `Court with name "${courtName}" not found` });
+            return res.status(404).json({ message: `Court with ID "${courtId}" not found` });
         }
 
         if (court.status !== 'available') {
@@ -38,21 +19,24 @@ const createReservation = async (req, res) => {
         }
 
         // Vérifie si le créneau est déjà réservé
-        const existingReservation = await Reservation.findOne({
-            where: { courtId: court.id, date, timeSlot },
+        const slot = await Slots.findOne({
+            where: { id: slotId, courtId: court.id, status: 'available' },
         });
 
-        if (existingReservation) {
-            return res.status(400).json({ message: 'Time slot already booked' });
+        if (!slot) {
+            return res.status(400).json({ message: 'Time slot already booked or not available' });
         }
 
         // Crée la réservation
         const reservation = await Reservation.create({
             userId,
+            slotId: slot.id,
             courtId: court.id,
-            date,
-            timeSlot,
         });
+
+        // Update slot status
+        slot.status = 'unavailable';
+        await slot.save();
 
         res.status(201).json(reservation);
     } catch (error) {
@@ -68,10 +52,22 @@ const getUserReservations = async (req, res) => {
     try {
         const reservations = await Reservation.findAll({
             where: { userId },
-            include: [Court],
+            include: [
+                {
+                    model: Slots,
+                    include: [Court]
+                }
+            ],
         });
 
-        res.status(200).json(reservations);
+        const formattedReservations = reservations.map(reservation => ({
+            id: reservation.id,
+            courtName: reservation.Slot.Court.name,
+            slotName: reservation.Slot.name,
+            schedule: reservation.Slot.schedule,
+        }));
+
+        res.status(200).json(formattedReservations);
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Error fetching reservations', error });
@@ -84,7 +80,9 @@ const deleteReservation = async (req, res) => {
     const { reservationId } = req.params;
 
     try {
-        const reservation = await Reservation.findByPk(reservationId);
+        const reservation = await Reservation.findByPk(reservationId, {
+            include: [Slots]
+        });
 
         if (!reservation) {
             return res.status(404).json({ message: 'Reservation not found' });
@@ -95,6 +93,11 @@ const deleteReservation = async (req, res) => {
         }
 
         await reservation.destroy();
+
+        // Update slot status
+        const slot = await Slots.findByPk(reservation.slotId);
+        slot.status = 'available';
+        await slot.save();
 
         res.status(200).json({ message: 'Reservation deleted successfully' });
     } catch (error) {

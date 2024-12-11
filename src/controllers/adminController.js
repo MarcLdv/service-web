@@ -1,35 +1,68 @@
 const { Admin } = require("../models");
-const { createJWT } = require("../jwt");
-const { hashPassword } = require("../bcrypt");
+const { Court } = require("../models");
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+const {  verifyPassword } = require("../bcrypt");
 
-exports.login = async (req, res) => {
+// Génération du token JWT
+const generateToken = (admin) => {
+  return jwt.sign(
+      { id: admin.id, pseudo: admin.pseudo },
+      process.env.JWT_SECRET,
+      { expiresIn: process.env.JWT_EXPIRES_IN }
+  );
+};
+
+// Login admin
+const loginAdmin = async (req, res) => {
+  if (!req.body.pseudo || !req.body.password) {
+    return res.status(400).json({ msg: "Pseudo and Password are required" });
+  }
   try {
-    // Login
-    if (!req.body.pseudo || !req.body.password) {
-      return res.status(400).json({ msg: "Impossible de vous authentifier" });
-    }
-    const hashedPassword = await hashPassword(req.body.password);
-
+    // Trouver l'admin
     const admin = await Admin.findOne({
       where: {
         pseudo: req.body.pseudo,
-        password: hashedPassword,
       },
     });
 
-    if (admin === null) {
-      return res.status(400).json({ msg: "Impossible de vous authentifier" });
+    if (!admin) {
+      return res.status(404).json({ msg: "Admin not found" });
     }
 
-    //Authentifié, signer et délivrer un jwt
-    const jwt = createJWT(admin.pseudo); // Correction de la création du JWT
+    // Vérifier le mot de passe
+    const isPasswordValid = await verifyPassword(req.body.password, admin.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ msg: "Invalid password" });
+    }
 
-    //Retourne le jwt au client
-    res.status(201).json({
-      access_token: jwt,
-    });
+    // Authentifié, signer et délivrer un jwt
+    const token = generateToken(admin);
+    res.status(200).json({ message: 'Login successful.', token });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "An error occurred" });
+    res.status(500).json({ message: "Error Loggin in", error });
   }
+};
+
+// TODO : Ajouter les fonctions suivantes
+// Modifier le statut d'un cours
+const changeCourtStatus = async (req, res) => {
+  try {
+    const court = await Court.findByPk(req.params.id);
+    if (!court) {
+      return res.status(404).json({ message: "Court not found" });
+    }
+    court.status = req.body.status;
+    await court.save();
+    res.status(200).json({ message: "Court status updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating court status", error });
+  }
+}
+
+module.exports = {
+  loginAdmin,
+  changeCourtStatus,
 };

@@ -153,9 +153,6 @@ router.post('/', courtController.createCourt);
  *               name:
  *                 type: string
  *                 description: Nouveau nom du court
- *               status:
- *                 type: string
- *                 description: Nouveau statut du court
  *     responses:
  *       200:
  *         description: Court mis à jour avec succès

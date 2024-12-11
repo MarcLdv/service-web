@@ -1,6 +1,9 @@
 const { Court } = require('../models');
 
 // Ajouter un terrain
+
+// Fonction non complète, lorsque l'on créer un terrain, ses slots ne sont pas ajoutés
+// il n'est donc pas possible de réserver un créneau horaire pour ce nouveau terrain
 exports.createCourt = async (req, res) => {
     try {
         const { name, status } = req.body;
@@ -49,7 +52,7 @@ exports.getCourtById = async (req, res) => {
 exports.updateCourt = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, status } = req.body;
+        const { name } = req.body;
 
         const court = await Court.findByPk(id);
         if (!court) {
@@ -57,7 +60,6 @@ exports.updateCourt = async (req, res) => {
         }
 
         court.name = name || court.name;
-        court.status = status || court.status;
 
         await court.save();
 
