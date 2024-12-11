@@ -296,7 +296,7 @@ paths:
         500:
           description: Erreur interne du serveur
   /admin/courts/{id}:
-    post:
+    put:
       summary: Modifier le statut d'un terrain
       tags: [Admin]
       security:

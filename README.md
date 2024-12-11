@@ -89,7 +89,7 @@ curl -X 'POST' \
 - node graphql/server.js
 ```
 
-- Tester via Postamn
+- Tester via Postman
 
     Méthode : POST \
     URL : http://localhost:4000/
@@ -98,10 +98,15 @@ curl -X 'POST' \
 
     ```Json
     {
-        "query": "query GetAvailableSlots($date: String!, $terrain: String!) { availableSlots(date: $date, terrain: $terrain) { time isAvailable } }",
+        "query": "query AvailableSlots($date: String!, $terrain: String!) {
+          availableSlots(date: $date, terrain: $terrain) {
+            time
+            date
+          }
+        }",
         "variables": {
-            "date": "2024-11-27",
-            "terrain": "A"
+          "date": "2024-12-12",
+          "terrain": "B"
         }
     }
     ```
@@ -144,4 +149,28 @@ curl -X 'POST' \
 
 ## Remarques
 
->
+>Marc Lebreton -> J'ai beaucoup apprécié travailler sur ce projet. Il m'aura permis de découvrir de nombreuses technologies que j'espère réutiliser à l'avenir, notamment Node.js que j'avais très peu vu et qui est une technologie importante. J'ai également mis en place une le développement de ce projet en réfléchissant d'abord à son design puis ensuite au développement. Cependant, cette méthode a aussi eu son lot de désavantage, après avoir établis un premier design, j'ai mal exprimé la façon dont je voulais implémenter les créneaux d'un court avec Victor et nous sommes parties dans des directions opposées, de mon côté, j'ai créé un slot pour chaque créneau afin de pouvoir récupérer son statut, horaire et avoir un id de user. Cependant, Victor de son côté a fait l'inverse en limitant la taille de la base de données et associant les réservations aux slots directement. Nous n'avons pas réussi à savoir quelle méthode était la plus optimale dans ce genre de situation, c'est pour cela que nous avons deux versions ressemblantes, mais des différences aux niveaux des slots.
+
+## Références
+
+### OpenAPI
+
+- [Le guide officiel pour démarrer avec OpenAPI](https://learn.openapis.org/) ;
+- [OpenAPI tooling](https://tools.openapis.org/), 
+- [The OpenAPI Specification Explained](https://learn.openapis.org/specification/),
+
+### Sequelize
+
+- [Sequelize](https://sequelize.org/)
+
+### GraphQL
+
+- [Documentation officielle](https://graphql.org/learn/)
+
+### Node JS
+
+- [Documentation officielle](https://nodejs.org/docs/latest/api/)
+
+### JSONWEBTOKEN
+
+- [Documentation](https://www.npmjs.com/package/jsonwebtoken)

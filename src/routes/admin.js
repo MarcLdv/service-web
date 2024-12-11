@@ -56,7 +56,7 @@ router.post('/login', loginAdmin);
 /**
  * @swagger
  * /admin/courts/{id}:
- *   post:
+ *   put:
  *     summary: Modifier le statut d'un terrain
  *     tags: [Admin]
  *     security:
@@ -102,6 +102,6 @@ router.post('/login', loginAdmin);
  *       500:
  *         description: Erreur interne du serveur
  */
-router.post('/courts/:id', changeCourtStatus);
+router.put('/courts/:id', changeCourtStatus);
 
 module.exports = router;
