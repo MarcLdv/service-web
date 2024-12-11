@@ -141,3 +141,7 @@ curl -X 'POST' \
 ## Sécurité
 
 >Dans notre application nous avons utilisé la bibliothèque bcrypt afin de hasher le mot de passe de l'admin lors du peupleument, pour cela nous avon définis un "salt" puis les fonction de cryptage et décryptage qui sont donc utilisées au peupleument et au login de l'admin pour comparer les mots de passes. Ainsi, on obtient un mot de passe de ce type : "$2b$10$bRvyT7158hQCcbWMN3fn6Oo6YEQK6PfPn94Hg79Z92qFlKIvGaP3b".
+
+## Remarques
+
+>

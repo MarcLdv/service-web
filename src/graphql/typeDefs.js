@@ -4,6 +4,7 @@ const typeDefs = gql`
     type Slots {
         time: String
         isAvailable: Boolean
+        date: String
     }
 
     type Query {

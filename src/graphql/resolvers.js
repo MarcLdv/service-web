@@ -16,6 +16,7 @@ const resolvers = {
                 return timeSlots.map((slot) => ({
                     time: `${slot}:00-${slot + 1}:00`,
                     isAvailable: !reservedSlots.includes(slot),
+                    date: date,
                 }));
             } catch (error) {
                 console.error(error);
