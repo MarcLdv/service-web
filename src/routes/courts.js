@@ -130,37 +130,5 @@ router.get('/:id', courtController.getCourtById);
  */
 router.post('/', courtController.createCourt);
 
-/**
- * @swagger
- * /courts/{id}:
- *   put:
- *     summary: Met à jour un court existant
- *     tags: [Courts]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID du court à modifier
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Nouveau nom du court
- *     responses:
- *       200:
- *         description: Court mis à jour avec succès
- *       404:
- *         description: Court non trouvé
- *       500:
- *         description: Erreur interne du serveur
- */
-router.put('/:id', courtController.updateCourt);
 
 module.exports = router;
