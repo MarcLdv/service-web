@@ -47,28 +47,3 @@ exports.getCourtById = async (req, res) => {
         res.status(500).json({ message: 'An error occurred' });
     }
 };
-
-// Fonction pour mettre à jour un terrain
-exports.updateCourt = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { name } = req.body;
-
-        const court = await Court.findByPk(id);
-        if (!court) {
-            return res.status(404).json({ message: 'Court not found' });
-        }
-
-        court.name = name || court.name;
-
-        await court.save();
-
-        res.status(200).json({
-            message: 'Court updated successfully',
-            court,
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-};
