@@ -95,6 +95,8 @@ router.post('/login', loginAdmin);
  *                   description: Message de succès
  *             example:
  *               message: "Court status updated successfully"
+ *       401:
+ *         description: Non autorisé (token manquant ou invalide)
  *       404:
  *         description: Terrain non trouvé
  *       500:

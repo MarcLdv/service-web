@@ -22,7 +22,7 @@ module.exports = {
             const slotTime = new Date(startOfWeek);
             slotTime.setDate(startOfWeek.getDate() + day + week * 7);
             slotTime.setUTCHours(10, 0, 0, 0); // Start at 10 AM UTC
-            slotTime.setUTCMinutes(slotTime.getUTCMinutes() + slot * 45);
+            slotTime.setUTCMinutes(slotTime.getUTCMinutes() + slot * 45); // Slot of 45 minutes
 
             slots.push({
               name: `Slot ${week * 96 + day * 16 + slot + 1}`,

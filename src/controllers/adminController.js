@@ -49,7 +49,7 @@ const loginAdmin = async (req, res) => {
 // Modifier le statut d'un cours
 const changeCourtStatus = async (req, res) => {
   try {
-    const court = await Court.findByPk(req.params.id);
+    const court = await Court.findByPk(req.admin.id);
     if (!court) {
       return res.status(404).json({ message: "Court not found" });
     }
