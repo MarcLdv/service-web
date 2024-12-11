@@ -22,32 +22,89 @@ npm install
 node gensecrekey.js
 ```
 
+- Lancer le Serveur Postgresql
 
-docker-compose up -d
+```Bash
+docker compose up -d
+```
 
-Dans le dossier src effectuer les commandes suivantes :
+- Créer la base de donnée
+
+```Bash
+cd .\src\
 npx sequelize-cli db:migrate
+```
+
+- Peupler la base de données
+
+```Bash
 npx sequelize-cli db:seed:all
+```
 
+- Lancer l'API
+
+```Bash
 npm run dev
+```
 
-Démarrer le serveur GraphQL : 
- - node graphql/server.js
+## Utiliser le service
 
-Pour le tester sur Postman :
-- Méthode : POST
-- URL : http://localhost:4000/
-- Body :
-`````json
-{
-    "query": "query GetAvailableSlots($date: String!, $terrain: String!) { availableSlots(date: $date, terrain: $terrain) { time isAvailable } }",
-    "variables": {
-        "date": "2024-11-27",
-        "terrain": "A"
+>Pour avoir une vision globale de l'API et la documentation Swagger se connecter sur l'adresse :
+
+```Bash
+localhhost:3000/api-docs
+```
+
+- S'autentifier
+
+```Bash
+curl -X 'POST' \
+  'http://localhost:3000/login' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "username": "JeanDupont"
+}'
+```
+
+- Accéder à une ressource protégée
+
+```Bash
+curl -X 'POST' \
+  'http://localhost:3000/reservations' \
+  -H 'accept: */*' \
+  -H 'Authorization: Bearer  <votre jwt>' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "courtId": 1,
+  "slotId": 1
+}'
+```
+
+## Démarer le serveur GraphQL
+
+- Lancer le serveur
+
+```Bash
+- node graphql/server.js
+```
+
+- Tester via Postamn
+
+    Méthode : POST \
+    URL : http://localhost:4000/
+
+  - Body
+
+    ```Json
+    {
+        "query": "query GetAvailableSlots($date: String!, $terrain: String!) { availableSlots(date: $date, terrain: $terrain) { time isAvailable } }",
+        "variables": {
+            "date": "2024-11-27",
+            "terrain": "A"
+        }
     }
-}
-`````
-
+    ```
 
 ## Dictionnaire des données
 
@@ -66,6 +123,7 @@ Pour le tester sur Postman :
 | status    | Status de l'horaire                 | String  | Oui            | Peut prendre les valeurs : `available`, `unavailable`     |
 
 ## Tableau récapitulatif
+
 | Ressource                                            | Noms des ressources (URL)         | Paramètres d'URL                                                      | Méthodes HTTP  | Commentaires                                                                                    |
 |:-----------------------------------------------------|:----------------------------------|:----------------------------------------------------------------------|:---------------|:------------------------------------------------------------------------------------------------|
 | Récupérer tous les terrains                          | /courts                           |                                                                       | GET            |                                                                                                 |
@@ -80,8 +138,6 @@ Pour le tester sur Postman :
 | Se connecter en tant qu'administrateur               | /admin/login                      | Format JSON dans le body : "name" et le mot de passe "password"       | POST           |                                                                                                 |
 | Modifier le statut d'un terrain                      | /admin/courts/{courtId}           | Identifiant d'un terrain                                              | POST           | L'utilisateur doit être connecté en tant qu'administrateur pour modifier le statut d'un terrain |
 
+## Sécurité
 
-TODO : 
-README CLEAN
-Un Open API Description File (OAD) au format yaml, décrivant votre API
-GRAPHQL REVOIR TRUC QUI BUG
+>Dans notre application nous avons utilisé la bibliothèque bcrypt afin de hasher le mot de passe de l'admin lors du peupleument, pour cela nous avon définis un "salt" puis les fonction de cryptage et décryptage qui sont donc utilisées au peupleument et au login de l'admin pour comparer les mots de passes. Ainsi, on obtient un mot de passe de ce type : "$2b$10$bRvyT7158hQCcbWMN3fn6Oo6YEQK6PfPn94Hg79Z92qFlKIvGaP3b".
